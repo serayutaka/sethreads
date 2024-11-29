@@ -35,7 +35,7 @@ const ProfileAlert = ({ isOpen, isClose, onClose, children, setStudent, EditCour
     axios.put(
       `${
         process.env.REACT_APP_SERVER_DOMAIN_NAME
-      }/api/student/update-ta?student_id=${children.student_id}&is_ta=${
+      }/api/student/update-ta?student_id=${children.id}&is_ta=${
         inputTACourse ? "true" : "false"
       }&ta_course_id=${inputTACourse ? inputTACourse : "null"}`,
       {},
@@ -71,7 +71,7 @@ const ProfileAlert = ({ isOpen, isClose, onClose, children, setStudent, EditCour
   function handleRegCourse() {
     axios.post(`${process.env.REACT_APP_SERVER_DOMAIN_NAME}/api/student/register-course`, {
       "course_id": inputCourse,
-      "student_id": children.student_id,
+      "student_id": children.id,
       "year": children.year
     }, {
       headers: {
@@ -99,7 +99,7 @@ const ProfileAlert = ({ isOpen, isClose, onClose, children, setStudent, EditCour
   }
 
   function handleRemoveCourse(course_id) {
-    axios.delete(`${process.env.REACT_APP_SERVER_DOMAIN_NAME}/api/student/withdraw-course?student_id=${children.student_id}&course_id=${course_id}`, {
+    axios.delete(`${process.env.REACT_APP_SERVER_DOMAIN_NAME}/api/student/withdraw-course?student_id=${children.id}&course_id=${course_id}`, {
       headers: {
         "x-token": localStorage.getItem("token"),
       }
