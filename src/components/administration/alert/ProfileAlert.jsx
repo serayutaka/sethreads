@@ -18,12 +18,14 @@ const ProfileAlert = ({ isOpen, isClose, onClose, children, setStudent, EditCour
   const [isErrorClose, setIsErrorClose] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  console.log(children);
+
   useEffect(() => {
     if (EditCourse) {
       setIsEditCourses(true);
     } else {
       setIsEditCourses(false);
-      (children && setInputTACourse(`${children.is_ta ? children.courseTAInfo.course_id : ""}`))
+      (children && setInputTACourse(`${children.is_ta ? children.ta_course_id : ""}`))
     }
   }, [children, isOpen, onClose]);
 
