@@ -33,12 +33,12 @@ const PostThreadBtn = ({ title, body, createdBy, courseId, isValid, onPost, file
   async function uploadFiles(thread_id) {
     const formData = new FormData();
     Array.from(files).forEach((file) => {
-      const newFile = new File([file], `${courseId === "home" ? "home" : "thread"}ID_${thread_id}-${file.name}`, { type: file.type });
+      const newFile = new File([file], `threadID_${thread_id}-${file.name}`, { type: file.type });
       formData.append("files", newFile);
     });
 
     axios.post(
-      `${process.env.REACT_APP_SERVER_DOMAIN_NAME}/api/${courseId === "home" ? "home" : "thread"}/upload-files`,
+      `${process.env.REACT_APP_SERVER_DOMAIN_NAME}/api/thread/upload-files`,
       formData,
       {
         headers: {
@@ -51,7 +51,7 @@ const PostThreadBtn = ({ title, body, createdBy, courseId, isValid, onPost, file
     });
   }
 
-  function postToCourse() {
+  function postThread() {
     const files_name = files.map((file) => file.name);
 
     return axios.post(
@@ -73,27 +73,6 @@ const PostThreadBtn = ({ title, body, createdBy, courseId, isValid, onPost, file
     );
   }
 
-  function postToHome() {
-    const files_name = files.map((file) => file.name);
-    
-    return axios.post(
-      `${process.env.REACT_APP_SERVER_DOMAIN_NAME}/api/home/create-thread?notify=${isNotify}`,
-      {
-        title: title,
-        body: body,
-        is_highlight: false,
-        create_at: formattedDateTime,
-        create_by: createdBy,
-        files_name: files_name,
-      },
-      {
-        headers: {
-          "x-token": localStorage.getItem("token"),
-        },
-      }
-    );
-  }
-
   function handlePostThread() {
     if (isValid) {
       onPost();
@@ -101,7 +80,7 @@ const PostThreadBtn = ({ title, body, createdBy, courseId, isValid, onPost, file
       toast.promise(
         new Promise((resolve, reject) => {
           const startTime = Date.now();
-          (courseId === "home" ? postToHome() : postToCourse())
+          postThread()
             .then((res) => {
               const elapsedTime = Date.now() - startTime;
               const remainingDelay = Math.max(0, minDelay - elapsedTime);
