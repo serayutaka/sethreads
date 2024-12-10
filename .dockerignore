@@ -1,0 +1,21 @@
+# Exclude Node.js dependencies
+node_modules/
+
+# Exclude log files
+*.log
+
+# Exclude Markdown files
+*.md
+
+# Exclude version control
+.git/
+.gitignore
+
+# Exclude environment variables
+.env
+
+# Exclude build output
+dist/
+
+# Exclude code coverage reports
+coverage/
