@@ -2,8 +2,6 @@ import React from 'react';
 import { FaTrash } from "react-icons/fa6";
 
 function TableCourses({ student, isEditCourses, onDelete }) {
-    console.log(student)
-
     return (
         <table className='col-span-2 w-full mt-4 table-auto border-gray-500 border-collapse'>
             <thead>

@@ -10,7 +10,6 @@ import { getPreviewHTMLString } from '../../../../utilities/HtmlFilter';
 import LikeBtn from '../../../button/like/LikeBtn';
 
 const ThreadCard = ({ thread_id, name, year, time, title, body, comments, likes, studentId, updateLikes}) => {
-  console.log(likes)
   const [isLiked, setIsLiked] = useState(likes.some((like) => like.student_id === studentId));
   const [numberOfLikes, setNumberOfLikes] = useState(likes.length);
 

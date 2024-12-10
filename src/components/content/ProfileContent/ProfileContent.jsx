@@ -3,12 +3,14 @@ import TextTitle from "../../card/textTitle/TextTitle";
 import Separator from "../../separator/Separator";
 import { Link } from "react-router-dom";
 import { LoaderCircle } from 'lucide-react';
+import axios from "axios";
+import { FaHeart } from "react-icons/fa";
 
 const MiniThreadCard = ({ data }) => {
   return (
     <Link
       to={
-        data.course_id
+        data.course_id !== "home"
           ? `/course/${data.course_id}/thread/${data.id}`
           : `/home/thread/${data.id}`
       }
@@ -16,7 +18,7 @@ const MiniThreadCard = ({ data }) => {
     >
       <article className="flex overflow-hidden flex-col self-center px-6 py-3 rounded-3xl bg-eerie-black hover:bg-general-highlight transition duration-200">
         <div className="text-software-orange">
-          {data.course_id ? (
+          {data.course_id != "home" ? (
             <>
               <span className="text-gray-300">Course ID: </span>
               <span>{data.course_id}</span>
@@ -27,18 +29,64 @@ const MiniThreadCard = ({ data }) => {
         </div>
         <TextTitle title={data.title} className="line-clamp-3 text-ellipsis" />
         <div className="flex mt-2 items-center text-gray-400">
-          {data.likes} Likes • {data.comments.length} Comments
+          {data.likes.length} Likes • {data.comments.length} Comments
         </div>
       </article>
     </Link>
   );
 };
 
+const MiniLikeCard = ({ data }) => {
+  const [title, setTitle] = useState("");
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_SERVER_DOMAIN_NAME}/api/thread/get-title?thread_id=${data.thread_id}`,
+      {
+        headers: {
+          "x-token": localStorage.getItem("token")
+        }
+      }
+    )
+      .then((res) => {
+        setTitle(res.data);
+      }
+      ).catch((err) => {
+        console.log(err);
+      });
+  }, [data])
+  return (
+    <Link
+      to={
+        data.course_id !== "home"
+          ? `/course/${data.course_id}/thread/${data.id}`
+          : `/home/thread/${data.id}`
+      }
+      className="contents"
+    >
+      <article className="flex overflow-hidden flex-col self-center px-6 py-3 rounded-3xl bg-eerie-black hover:bg-general-highlight transition duration-200">
+        <div className="text-software-orange">
+          {data.course_id != "home" ? (
+            <>
+              <span className="text-gray-300">Course ID: </span>
+              <span>{data.course_id}</span>
+            </>
+          ) : (
+            <span>HOME</span>
+          )}
+        </div>
+        <div className="flex gap-2 items-center">
+        <TextTitle title={title} className="line-clamp-3 text-ellipsis" />
+        <FaHeart className="text-cherry-red" />
+        </div>
+      </article>
+    </Link>
+  )
+}
+
 const MiniCommentCard = ({ data }) => {
   return (
     <Link
       to={
-        data.course_id
+        data.course_id !== "home"
           ? `/course/${data.course_id}/thread/${data.comment_from}`
           : `/home/thread/${data.id}`
       }
@@ -46,11 +94,11 @@ const MiniCommentCard = ({ data }) => {
     >
       <article className="flex overflow-hidden flex-col self-center px-6 py-3 rounded-3xl bg-eerie-black hover:bg-general-highlight transition duration-200">
         <TextTitle
-          title={data.comment_data}
+          title={data.body}
           className="line-clamp-3 text-ellipsis"
         />
         <div className="flex mt-2 items-center text-gray-400">
-          {data.subcomments.length} Replies
+          {data.replies.length} Replies
         </div>
       </article>
     </Link>
@@ -59,11 +107,8 @@ const MiniCommentCard = ({ data }) => {
 
 const ProfileContent = ({
   comments,
-  comments_public,
   posted,
-  posted_public,
   likedThreads,
-  likedHomeThreads,
   contentType,
   className = "",
 }) => {
@@ -72,10 +117,10 @@ const ProfileContent = ({
 
   useEffect(() => {
     setIsLoading(true);
-    setCurrentContentType(contentType);
-
+    
     const loadingTimer = setTimeout(() => {
       setIsLoading(false);
+      setCurrentContentType(contentType);
     }, 1000);
 
     return () => clearTimeout(loadingTimer);
@@ -95,21 +140,6 @@ const ProfileContent = ({
     <section className="animate-[fadeIn_0.15s_ease-in]">
       {contentType === "threads" && (
         <>
-          <h1 className="text-white text-2xl mb-4">
-            <strong>Home</strong>
-          </h1>
-          {posted_public.length === 0 && (<h1 className="text-gray-400 text-lg mb-4 text-center">No Activity</h1>)}
-          {posted_public.map((thread, index) => (
-            <div>
-              <MiniThreadCard data={thread} />
-              {index < posted_public.length - 1 && (
-                <Separator className="w-full my-4" />
-              )}
-            </div>
-          ))}
-          <h1 className="text-white text-2xl my-4">
-            <strong>Courses</strong>
-          </h1>
           {posted.length === 0 && (<h1 className="text-gray-400 text-lg mb-4 text-center">No Activity</h1>)}
           {posted.map((thread, index) => (
             <div>
@@ -123,25 +153,10 @@ const ProfileContent = ({
       )}
       {contentType === "likedThreads" && (
         <>
-          <h1 className="text-white text-2xl mb-4">
-            <strong>Home</strong>
-          </h1>
-          {likedHomeThreads.length === 0 && (<h1 className="text-gray-400 text-lg mb-4 text-center">No Activity</h1>)}
-          {likedHomeThreads.map((thread, index) => (
-            <div>
-              <MiniThreadCard data={thread} />
-              {index < likedHomeThreads.length - 1 && (
-                <Separator className="w-full my-4" />
-              )}
-            </div>
-          ))}
-          <h1 className="text-white text-2xl my-4">
-            <strong>Courses</strong>
-          </h1>
           {likedThreads.length === 0 && (<h1 className="text-gray-400 text-lg mb-4 text-center">No Activity</h1>)}
           {likedThreads.map((thread, index) => (
             <div>
-              <MiniThreadCard data={thread} />
+              <MiniLikeCard data={thread} />
               {index < likedThreads.length - 1 && (
                 <Separator className="w-full my-4" />
               )}
@@ -151,21 +166,6 @@ const ProfileContent = ({
       )}
       {contentType === "comments" && (
         <>
-          <h1 className="text-white text-2xl mb-4">
-            <strong>Home</strong>
-          </h1>
-          {comments_public.length === 0 && (<h1 className="text-gray-400 text-lg mb-4 text-center">No Activity</h1>)}
-          {comments_public.map((comment, index) => (
-            <div>
-              <MiniCommentCard data={comment} />
-              {index < comments_public.length - 1 && (
-                <Separator className="w-full my-4" />
-              )}
-            </div>
-          ))}
-          <h1 className="text-white text-2xl mb-4">
-            <strong>Course</strong>
-          </h1>
           {comments.length === 0 && (<h1 className="text-gray-400 text-lg mb-4 text-center">No Activity</h1>)}
           {comments.map((comment, index) => (
             <div>
