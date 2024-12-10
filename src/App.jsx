@@ -122,7 +122,7 @@ function App() {
               <Route path={`course/${taCourse.id}`} element={<Content courseId={taCourse.id} courseName={taCourse.name} studentId={studentId} />} />
             )}
             { studentId && (<Route path='home/thread/:threadId' element={<Thread fromHome={true} studentId={studentId} isAdmin={isAdmin} />} />)}
-            { (studentInfo) && (<Route path='course/:courseId/thread/:threadId' element={<Thread fromHome={false} studentId={studentId} isTA={studentInfo.is_ta} TACourseID={taCourse ? taCourse.course_id : ""} isAdmin={isAdmin} />} />)}
+            { (studentInfo) && (<Route path='course/:courseId/thread/:threadId' element={<Thread fromHome={false} studentId={studentId} isTA={studentInfo.is_ta} TACourseID={taCourse ? taCourse.id : ""} isAdmin={isAdmin} />} />)}
             {studentInfo && (<Route path='/create-thread' element={<CreateThread registeredCourses={studentInfo.registered} ta_course={taCourse} studentId={studentId} />} />)}
           </Route>
         </Route>

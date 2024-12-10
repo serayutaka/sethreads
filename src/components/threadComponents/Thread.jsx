@@ -70,6 +70,7 @@ const Thread = ({ fromHome, studentId, isTA, TACourseID, isAdmin }) => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         setThreadData(res.data);
         setNumComment(res.data.comments.length);
         setIsLiked(res.data.likes.some((like) => like.student_id === studentId));
@@ -306,10 +307,10 @@ const Thread = ({ fromHome, studentId, isTA, TACourseID, isAdmin }) => {
               name={`${threadData.author.name} ${threadData.author.surname}`}
               year={threadData.author.year}
               time={threadData.create_at}
-              studentId={threadData.author.student_id}
+              studentId={threadData.author.id}
             />
             <div ref={domNode} className="flex-1 flex justify-end">
-              {((studentId === threadData.author.student_id || isTA === true) || (isAdmin)) && (
+              {((studentId === threadData.author.id || isTA === true) || (isAdmin)) && (
                 <div>
                   <div className="flex">
                     {((isTA === true && courseId === TACourseID) || (isAdmin)) && (
@@ -319,7 +320,7 @@ const Thread = ({ fromHome, studentId, isTA, TACourseID, isAdmin }) => {
                         onClick={PinThread}
                       />
                     )}
-                    {((studentId === threadData.author.student_id) || (isAdmin)) && (
+                    {((studentId === threadData.author.id) || (isAdmin)) && (
                       <CiMenuKebab
                         className="text-xl text-white cursor-pointer"
                         onClick={() => setIsOpen((prev) => !prev)}

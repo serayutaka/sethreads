@@ -73,7 +73,6 @@ const NavBarProfile = ({ name, year, resetState, studentId }) => {
           <button
             className=" px-2 py-2  w-full text-sm hover:bg-general-highlight text-nowrap rounded-md border border-steadfast"
             onClick={() => {
-              console.log("T")
               navigate(`/profile/${studentId}`)
             }}
           >

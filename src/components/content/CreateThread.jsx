@@ -21,7 +21,7 @@ const CreateThread = ({ registeredCourses, ta_course, studentId }) => {
   const [isNotify, setIsNotify] = useState(false);
   const [isValid, setIsValid] = useState(false);
 
-  const isAllowNotify = ta_course ? ta_course.course_id === selectedCourseId : studentId === "admin";
+  const isAllowNotify = ta_course ? ta_course.id === selectedCourseId : studentId === "admin";
 
   useEffect(() => {
     setIsValid(selectedCourseId && title && body);
@@ -105,7 +105,10 @@ const CreateThread = ({ registeredCourses, ta_course, studentId }) => {
         >
           <CourseDropdown
             registeredCourses={
-              ta_course ? [...registeredCourses, ta_course] : registeredCourses
+              ta_course ? [...registeredCourses, {course: {
+                id: ta_course.id,
+                name: ta_course.name
+              }}] : registeredCourses
             }
             setSelectedCourseId={setSelectedCourseId}
             selectedCourseId={selectedCourseId}

@@ -124,7 +124,7 @@ const LoginPage = ({
           const startTime = Date.now();
           axios
             .post(`${process.env.REACT_APP_SERVER_DOMAIN_NAME}/sign-up`, {
-              student_id: studentId,
+              id: studentId,
               password: password,
             })
             .then((res) => {

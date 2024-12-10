@@ -18,8 +18,6 @@ const ProfileAlert = ({ isOpen, isClose, onClose, children, setStudent, EditCour
   const [isErrorClose, setIsErrorClose] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  console.log(children);
-
   useEffect(() => {
     if (EditCourse) {
       setIsEditCourses(true);

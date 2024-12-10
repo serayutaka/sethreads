@@ -17,8 +17,8 @@ const Sidebar = ({ registered_courses, currentPath, taCourse, isAdmin }) => {
           <div className="w-full">
             <SidebarItem
               subject={taCourse.name}
-              to={`/course/${taCourse.course_id}`}
-              isActive={currentPath === `/course/${taCourse.course_id}`}
+              to={`/course/${taCourse.id}`}
+              isActive={currentPath === `/course/${taCourse.id}`}
             />
           </div>
         </>

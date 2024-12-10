@@ -7,8 +7,6 @@ import ProfileContent from "./ProfileContent/ProfileContent";
 const UserHistory = () => {
     const [selectedTab, setSelectedTab] = useState("threads");
     const [studentData, setStudentData] = useState(null);
-    const [threadsLiked, setThreadsLiked] = useState([]);
-    const [threadsLikedHome, setThreadsLikedHome] = useState([]);
     const { studentID } = useParams();
     const [yearBackground, setYearBackground] = useState("");
     useEffect(() => {
@@ -40,26 +38,6 @@ const UserHistory = () => {
                 default:
                     setYearBackground("bg-gray-500");
             }
-            const threads = res.data.registered_courses.flatMap(course =>
-                course.forums.filter(thread =>
-                    thread.liked_by.some(like => like.student_id === studentID)
-                )
-            );
-            setThreadsLiked(threads);
-            axios.get(`${process.env.REACT_APP_SERVER_DOMAIN_NAME}/api/home/get`, {
-                headers: {
-                    "x-token": localStorage.getItem("token")
-                }
-            })
-            .then((res) => {
-                const likedThreads = res.data.filter(thread => 
-                    thread.liked_by.some(like => like.student_id === studentID)
-                );
-                setThreadsLikedHome(likedThreads);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
         }).catch((err) => {
             console.log(err);
         });
@@ -109,11 +87,8 @@ const UserHistory = () => {
                 {(studentData) && (
                     <ProfileContent 
                       comments={studentData.comment} 
-                      comments_public={studentData.comment_public}
                       posted={studentData.posted} 
-                      posted_public={studentData.posted_public}
-                      likedThreads={threadsLiked} 
-                      likedHomeThreads={threadsLikedHome}
+                      likedThreads={studentData.liked} 
                       contentType={selectedTab} 
                     />
                 )}
