@@ -39,10 +39,10 @@ function ProfileDisplay({ studentInfo, handleOnUpdate }) {
   function handleOnchangeStudent(data, mode) {
     if (mode === "TA") {
       if (data.ta_course_id === "null" || data.ta_course_id === null) {
-        setSelectedStudent((prevStudent) => ({ ...prevStudent, is_ta: false }));
+        setSelectedStudent((prevStudent) => ({ ...prevStudent, is_ta: false, ta_course_id: null, courseTAInfo: null }));
         handleOnUpdate();
       } else {
-        setSelectedStudent((prevStudent) => ({ ...prevStudent, is_ta: true, courseTAInfo: data }));
+        setSelectedStudent((prevStudent) => ({ ...prevStudent, is_ta: true, ta_course_id: data.id, courseTAInfo: data }));
         handleOnUpdate();
       }
     } else if (mode === "Course") {
